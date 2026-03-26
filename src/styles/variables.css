@@ -1,0 +1,64 @@
+/* Design Tokens - Eye Friendly Palette */
+:root {
+    /* DryEyeGuard Soft UI Tokens */
+    --bg-app: linear-gradient(135deg, #f0e5ff 0%, #ffffff 40%, #e0f0ff 70%, #fbfaff 100%);
+    --bg-sidebar: rgba(255, 255, 255, 0.6);
+    --bg-card: rgba(255, 255, 255, 0.45);
+    --bg-glass: rgba(255, 255, 255, 0.3);
+    --blur-glass: blur(16px) saturate(180%);
+
+    --text-primary: #1F2937;
+    --text-secondary: #6B7280;
+    --text-accent: #6a11cb;
+    /* Deep Purple */
+
+    --border-subtle: rgba(255, 255, 255, 0.3);
+    --shadow-soft: 0 8px 32px rgba(106, 17, 203, 0.05);
+    --shadow-premium: 0 15px 40px rgba(106, 17, 203, 0.08);
+    --radius-premium: 24px;
+
+    /* Signature Gradients */
+    --grad-primary: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    --grad-glow: 0 0 20px rgba(106, 17, 203, 0.3);
+
+    --color-primary: #6a11cb;
+    --color-secondary: #2575fc;
+    --color-success: #10B981;
+    --color-warning: #F59E0B;
+    --color-danger: #EF4444;
+
+    /* Assessment UI */
+    --option-bg: #F9FAFB;
+    --option-bg-hover: rgba(106, 17, 203, 0.05);
+    --option-border: #E5E7EB;
+    --option-border-selected: #6a11cb;
+    --option-text-selected: #6a11cb;
+
+    /* Transition */
+    --transition-fast: 0.2s ease;
+    --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Dark Mode Overrides */
+[data-theme="dark"] {
+    --bg-app: linear-gradient(135deg, #2e1065 0%, #0f172a 40%, #0891b2 70%, #020617 100%);
+    --bg-sidebar: rgba(15, 23, 42, 0.6);
+    --bg-card: rgba(15, 23, 42, 0.4);
+    --bg-glass: rgba(15, 23, 42, 0.25);
+    --blur-glass: blur(16px) saturate(160%);
+
+    --text-primary: #F3F4F6;
+    --text-secondary: #9CA3AF;
+    --text-accent: #818CF8;
+
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --shadow-premium: 0 15px 40px rgba(0, 0, 0, 0.5);
+
+    --color-primary: #6366F1;
+    --color-primary-hover: #818CF8;
+
+    --option-bg: #374151;
+    --option-bg-hover: #4B5563;
+    --option-border: #4B5563;
+}

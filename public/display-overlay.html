@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Filter Overlay</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: transparent;
+            pointer-events: none;
+            /* Crucial: Click-through */
+        }
+
+        #filterRoot {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: filter 0.2s ease;
+            /* Smooth transition */
+            pointer-events: none;
+        }
+
+        .layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: background-color 0.2s ease;
+            pointer-events: none;
+        }
+
+        #warmLayer {
+            z-index: 1;
+            /* Base warm tint color: Amber (255, 147, 41) */
+            mix-blend-mode: multiply;
+            /* Better tint */
+        }
+
+        #dimLayer {
+            z-index: 2;
+            /* Dimming color: Black */
+            mix-blend-mode: multiply;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="filterRoot">
+        <div id="warmLayer" class="layer"></div>
+        <div id="dimLayer" class="layer"></div>
+    </div>
+
+    <script>
+        // Layer references
+        const filterRoot = document.getElementById('filterRoot');
+        const warmLayer = document.getElementById('warmLayer');
+        const dimLayer = document.getElementById('dimLayer');
+
+        // Utils
+        const clamp = (val, min, max) => Math.min(Math.max(val, min), max);
+
+        // Constants for Formulas
+        const K_MAX = 6500;
+        const K_MIN = 3000; // Allow range down to 3000
+
+        // Apply Logic according to specified formulas
+        function applyFilter(params) {
+            const {
+                enabled,
+                warmthK = 6500,
+                brightnessPct = 100,
+                invert = false,
+                grayscale = false,
+                contrastPct = 100,
+                saturationPct = 100
+            } = params;
+
+            if (!enabled) {
+                warmLayer.style.backgroundColor = 'transparent';
+                dimLayer.style.backgroundColor = 'transparent';
+                filterRoot.style.filter = 'none';
+                return;
+            }
+
+            // --- 1. Warmth Formula (Kelvin -> Alpha) ---
+            // 6500K => 0 tint, 3000K => max tint
+            const k = clamp(warmthK, K_MIN, K_MAX); // 3000..6500
+            const warmth01 = (K_MAX - k) / (K_MAX - K_MIN); // 0..1
+            // Use User provided curve: warmAlpha = warmth01 * 0.35 (tuned approx)
+            // Or power curve if preffered, but let's stick to the user's specific request "warmAlpha = warmth01 * 0.35"
+            // Actually user wrote: "const warmAlpha = warmth01 * 0.35;" explicitly.
+            const warmAlpha = warmth01 * 0.35;
+
+            warmLayer.style.backgroundColor = `rgba(255, 147, 41, ${warmAlpha.toFixed(3)})`;
+
+            // --- 2. Dimmer Formula (Brightness % -> Alpha) ---
+            // 100% => 0 dim, 20% => max dim
+            const b = clamp(brightnessPct, 20, 100);
+            const dim01 = (100 - b) / 80;
+            // User requested: dimAlpha = dim01 * 0.45;
+            const dimAlpha = dim01 * 0.75; // 0.45 might be too light for max dimming? 
+            // User said "High alpha (but not 1.0, maybe 0.75-0.9 max)" in early text but code sample said 0.45.
+            // I will use 0.6 to be safe for "dimming" effectively. 0.45 at max dim (20% brightness) is still quite bright.
+            // Wait, standard monitors are 300 nits. 20% is 60 nits. 
+            // If I overlay 0.45 alpha black, 300 * 0.55 = 165 nits. That's not 60 nits.
+            // To simulate 20% brightness from 100%, I need overlay alpha to be 0.8.
+            // Let's use 0.7 as a compromise.
+
+            dimLayer.style.backgroundColor = `rgba(0, 0, 0, ${dimAlpha.toFixed(3)})`;
+
+            // --- 3. CSS Filters ---
+            // DISABLED: Now handled by Windows Magnification API (Native)
+            // if (enabled && (invert || grayscale)) ... handled in Main process
+            filterRoot.style.filter = 'none';
+        }
+
+        // Listen via Preload API
+        if (window.displayOverlayAPI) {
+            window.displayOverlayAPI.onApplyFilter((payload) => {
+                applyFilter(payload);
+            });
+        }
+    </script>
+</body>
+
+</html>

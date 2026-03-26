@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dry Eye Guard - AI Companion (TS)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo"><i class="ph-duotone ph-eye"></i> DryEyeGuard</div>
+            <button class="nav-btn" data-tab="display"><i class="ph-duotone ph-monitor"></i> Display</button>
+            <button class="nav-btn" data-tab="work"><i class="ph-duotone ph-briefcase"></i> Work Companion</button>
+            <button class="nav-btn" data-tab="checkup"><i class="ph-duotone ph-stethoscope"></i> Eye Checkup</button>
+            <button class="nav-btn" data-tab="advisor"><i class="ph-duotone ph-chats-teardrop"></i> Eye Advisor</button>
+            <button class="nav-btn" data-tab="stats"><i class="ph-duotone ph-chart-bar-horizontal"></i>
+                Statistics</button>
+            <button class="nav-btn" data-tab="settings"><i class="ph-duotone ph-gear"></i> Settings</button>
+        </nav>
+
+        <!-- Main Content (Same as before) -->
+        <main class="content">
+            <!-- Consent Modal Removed -->
+
+
+            <!-- 1. Display View (CareUEyes Clone) -->
+            <section id="view-display" class="view">
+                <!-- Replicating CareUEyes UI Structure -->
+                <h1>Display Filter</h1>
+
+                <div class="care-card">
+                    <div class="care-card-inner">
+                        <div class="care-main">
+                            <!-- Warmth Slider -->
+                            <div class="care-slider-row" style="margin-bottom: 45px;">
+                                <span class="care-label">Warm</span>
+                                <div class="care-range-wrap">
+                                    <span id="slider-warmth-pill" class="care-pill">6500K</span>
+                                    <input type="range" id="slider-warmth" class="care-range" min="1000" max="6500"
+                                        step="50">
+                                </div>
+                                <span class="care-label">Cool</span>
+                                <button id="btn-warmth-reset" class="care-reset" title="Reset Warmth"><i
+                                        class="fas fa-undo"></i></button>
+                            </div>
+
+                            <!-- Brightness Slider -->
+                            <div class="care-slider-row" style="margin-bottom: 25px;">
+                                <span class="care-label">Dimmer</span>
+                                <div class="care-range-wrap">
+                                    <span id="slider-brightness-pill" class="care-pill">100%</span>
+                                    <input type="range" id="slider-brightness" class="care-range" min="20" max="100"
+                                        step="1">
+                                </div>
+                                <span class="care-label">Brighter</span>
+                                <!-- Hidden reset for brightness if needed, or reuse space -->
+                                <div style="width: 34px;"></div>
+                            </div>
+
+                            <!-- Mode Grid -->
+                            <div class="care-modes">
+                                <button class="care-mode" data-profile="pause">Pause</button>
+                                <button class="care-mode" data-profile="health">Health</button>
+                                <button class="care-mode" data-profile="game">Game</button>
+                                <button class="care-mode" data-profile="movie">Movie</button>
+
+                                <button class="care-mode" data-profile="office">Office</button>
+                                <button class="care-mode" data-profile="editing">Editing</button>
+                                <button class="care-mode" data-profile="reading">Reading</button>
+                                <button class="care-mode" data-profile="custom">Custom</button>
+                            </div>
+
+                            <div id="display-mode-desc" class="care-desc">
+                                Maintain the system normal brightness and color temperature.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </section>
+
+            <!-- 2. Work View -->
+            <section id="view-work" class="view">
+                <div class="work-container">
+                    <div class="work-header">
+                        <h1>Work Session</h1>
+                        <p class="work-subtitle">AI-powered eye protection active</p>
+                    </div>
+
+                    <div class="timer-wrapper">
+                        <svg class="timer-svg" viewBox="0 0 200 200">
+                            <!-- Clean thin border -->
+                            <circle class="timer-bg" cx="100" cy="100" r="92"></circle>
+                            <!-- Fill gradient -->
+                            <defs>
+                                <linearGradient id="timer-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#6a11cb" />
+                                    <stop offset="100%" stop-color="#2575fc" />
+                                </linearGradient>
+                            </defs>
+                            <circle id="timer-progress" class="timer-bar" cx="100" cy="100" r="92"
+                                stroke="url(#timer-grad)"></circle>
+                        </svg>
+                        <div class="timer-display">
+                            <span id="timer-text">25:00</span>
+                        </div>
+                        <!-- Score Badge -->
+                        <div id="focus-score-badge" class="focus-score-badge hidden" title="Real-time Focus Quality">
+                            <i class="ph-fill ph-sparkle"></i>
+                            <span id="focus-score-value">100</span>
+                        </div>
+                    </div>
+
+                    <div class="ai-status-row">
+                        <div id="focus-streak-badge" class="streak-chip" title="Focus Streak">
+                            <i class="ph-fill ph-fire"></i>
+                            <span>Streak: <strong id="focus-streak-value">0</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="controls-row">
+                        <button id="btn-start-work" class="primary-btn-premium">
+                            <i class="ph-fill ph-play"></i> Start Focus
+                        </button>
+                        <button id="btn-pause-work" class="secondary-btn-premium hidden">
+                            <i class="ph-bold ph-pause"></i> Pause
+                        </button>
+                        <button id="btn-finish-work" class="primary-btn-premium hidden">
+                            <i class="ph-bold ph-check"></i> Finish
+                        </button>
+                        <button id="btn-reset-work" class="ghost-btn">Reset</button>
+                    </div>
+
+                    <!-- AI Guidance Area -->
+                    <div id="ai-guidance" class="ai-guidance-box">
+                        "Ready to protect your eyes?"
+                    </div>
+
+                    <!-- Distance Card (Centralized below buttons) -->
+                    <div class="distance-card">
+                        <div class="distance-info">
+                            <i class="ph-duotone ph-ruler"></i>
+                            <span class="label">Distance:</span>
+                            <span id="distance-value" class="value">Unknown</span>
+                        </div>
+                        <div class="progress-track-lite">
+                            <div id="distance-indicator" class="progress-fill-lite ok"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Checkup View (Redesigned) -->
+            <section id="view-checkup" class="view active">
+                <div class="assessment-container">
+
+                    <!-- Progress Header -->
+                    <div id="assessment-progress" class="hidden">
+                        <div class="progress-panel">
+                            <span class="progress-info">Question <span id="progress-current">1</span> / 19</span>
+                            <span class="progress-info">~2 mins remaining</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div id="progress-fill" class="progress-bar-fill"></div>
+                        </div>
+                    </div>
+
+                    <!-- Question Card container -->
+                    <div id="question-card" class="question-card">
+                        <!-- Content injected by AssessmentController -->
+                        <div style="text-align:center; padding: 2rem;">
+                            <div style="font-size:4rem; color:var(--color-primary); margin-bottom:1.5rem;">
+                                <i class="ph-duotone ph-stethoscope"></i>
+                            </div>
+                            <h2>Chào mừng bạn đến với DryEyeGuard</h2>
+                            <p style="color:var(--text-secondary); margin:1rem 0;">
+                                Hãy cùng đánh giá sức khỏe mắt của bạn qua một vài câu hỏi nhanh.
+                            </p>
+                            <button id="btn-start-assess" class="primary-btn">Bắt đầu kiểm tra</button>
+                        </div>
+                    </div>
+
+                    <!-- Reading Card (Visible during Camera Test) -->
+                    <div id="reading-card" class="reading-card hidden">
+                        <div class="reading-content">
+                            <div class="reading-hint">
+                                <i class="ph-bold ph-info"></i> Bạn hãy đọc thoải mái, không cần đọc nhanh
+                            </div>
+                            <article class="poem-section">
+                                <p>Cỏ non xanh tận chân trời,<br>
+                                    Cành lê trắng điểm một vài bông hoa.<br>
+                                    Thanh minh trong tiết tháng ba,<br>
+                                    Lễ là tảo mộ, hội là đạp thanh.<br>
+                                    Gần xa nô nức yến anh,<br>
+                                    Chị em sắm sửa bộ hành chơi xuân.<br>
+                                    Dập dìu tài tử giai nhân,<br>
+                                    Ngựa xe như nước, áo quần như nêm.</p>
+                                <footer class="source">— Trích Truyện Kiều, Nguyễn Du</footer>
+                            </article>
+                            <div class="explanation-section">
+                                <h3>Giải thích:</h3>
+                                <p>Đoạn thơ mở ra một không gian mùa xuân rộng lớn và tươi sáng, nơi thiên nhiên và con
+                                    người hòa vào cùng một nhịp sống. Cánh đồng cỏ non trải dài đến tận chân trời gợi
+                                    cảm giác khoáng đạt, yên bình, trong khi sắc trắng tinh khôi của hoa lê điểm xuyết
+                                    tạo nên nét thanh tao cổ điển. Không gian ấy không tĩnh lặng mà rộn ràng bởi lễ hội
+                                    mùa xuân, bởi bước chân du xuân, tiếng người qua lại, xe ngựa tấp nập. Thiên nhiên
+                                    vì thế không chỉ là phông nền, mà trở thành một phần của đời sống con người, mang
+                                    theo hơi thở vui tươi nhưng vẫn giữ được sự nhã nhặn, hài hòa của văn hóa truyền
+                                    thống.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- 3.5 Eye Advisor View -->
+            <section id="view-advisor" class="view">
+                <div id="advisor-container" class="advisor-container">
+                    <!-- Categories and FAQs will be injected here -->
+                </div>
+            </section>
+
+            <!-- 4. Stats View -->
+            <section id="view-stats" class="view">
+                <h1>Health Statistics</h1>
+                <div id="stats-container">
+                    <!-- Stats content will be injected by StatisticsController -->
+                    <p class="loading-text">Loading your health data...</p>
+                </div>
+            </section>
+            <!-- 5. Settings View -->
+            <section id="view-settings" class="view">
+                <h1>Settings</h1>
+                <div class="settings-container">
+
+                    <!-- Group 1: Preferences -->
+                    <div class="settings-group">
+                        <h3>Preferences</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Dark Mode</span>
+                                <span class="setting-desc">Switch between light and dark themes</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="setting-theme-toggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Group 2: Eye Care -->
+                    <div class="settings-group">
+                        <h3>Eye Care Companion</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Protection Mode</span>
+                                <span class="setting-desc">Intensity of eye protection</span>
+                            </div>
+                            <select id="setting-work-mode" class="setting-select">
+                                <option value="balanced">Balanced (Recommended)</option>
+                                <option value="strict">Strict (High Protection)</option>
+                                <option value="deep_focus">Deep Focus (Fewer Interruptions)</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Work Duration (mins)</span>
+                                <span class="setting-desc">Time to focus (max 60m)</span>
+                            </div>
+                            <input type="number" id="setting-work-duration" class="setting-input" min="1" max="60"
+                                value="1">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Sessions per Cycle</span>
+                                <span class="setting-desc">Work blocks before a long break</span>
+                            </div>
+                            <input type="number" id="setting-sessions-cycle" class="setting-input" min="1" max="10"
+                                value="4">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Break Duration (mins)</span>
+                                <span class="setting-desc">Eye rest time</span>
+                            </div>
+                            <input type="number" id="setting-break-duration" class="setting-input" min="1" max="30"
+                                value="5">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Sound Alerts</span>
+                                <span class="setting-desc">Play a sound when break starts</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="setting-sound-toggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Edge Lighting</span>
+                                <span class="setting-desc">Visual alert on screen edge</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="setting-edge-toggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <button id="btn-preview-edge" class="secondary-btn small-btn"
+                                style="margin-left:auto;">Preview Edge
+                                Lighting</button>
+                        </div>
+                    </div>
+
+                    <!-- Group 3: System -->
+                    <div class="settings-group">
+                        <h3>System</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Camera Access</span>
+                                <span class="setting-desc">Check if camera permissions are granted</span>
+                            </div>
+                            <button id="btn-check-camera" class="secondary-btn small-btn">Test Camera</button>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label danger-text">Reset Data</span>
+                                <span class="setting-desc">Clear all statistics and history</span>
+                            </div>
+                            <button id="btn-reset-data" class="danger-btn small-btn">Clear Data</button>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Camera Overlay -->
+    <div id="assessment-overlay" class="assessment-overlay hidden">
+        <video id="assessment-video" autoplay muted></video>
+        <canvas id="assessment-canvas"></canvas>
+        <div class="assessment-hud">
+            <div class="hud-item"><span class="hud-label"><i class="ph-bold ph-arrows-out-line-horizontal"></i>
+                    Dist:</span> <span id="hud-dist">0</span>cm</div>
+            <div class="hud-item"><span class="hud-label"><i class="ph-bold ph-eye"></i> EAR:</span> <span
+                    id="hud-ear">0.00</span></div>
+            <div class="hud-item"><span class="hud-label"><i class="ph-bold ph-intersect"></i> Blinks:</span> <span
+                    id="hud-blinks">0</span></div>
+            <div class="hud-item"><span class="hud-label"><i class="ph-bold ph-warning-circle"></i> Inc:</span> <span
+                    id="hud-incomplete">0</span></div>
+            <div class="hud-item"><span class="hud-label"><i class="ph-bold ph-activity"></i> Rate:</span> <span
+                    id="hud-rate">0</span></div>
+        </div>
+        <div class="overlay-status">Scanning... <span id="overlay-timer">10</span>s</div>
+    </div>
+
+    <!-- Modules Entry Point -->
+    <script type="module" src="/src/main.ts"></script>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast-notification" class="toast hidden">
+        <div class="toast-icon">🔔</div>
+        <div class="toast-content">
+            <div id="toast-title" class="toast-title">Notification</div>
+            <div id="toast-message" class="toast-message">Message body</div>
+        </div>
+    </div>
+
+    <!-- ALERT MODAL -->
+    <div id="alert-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h3 id="modal-title">Alert</h3>
+            <p id="modal-message">Description of the alert goes here.</p>
+            <div class="modal-actions">
+                <button id="btn-modal-snooze" class="secondary-btn">Snooze</button>
+                <button id="btn-modal-dismiss" class="primary-btn">Okay</button>
+            </div>
+        </div>
+    </div>
+    <!-- SESSION SUMMARY MODAL -->
+    <div id="summary-modal" class="modal-overlay hidden">
+        <div class="modal-card summary-card">
+            <div class="summary-header">
+                <i class="ph-duotone ph-trophy"></i>
+                <h2>Session Summary</h2>
+            </div>
+            <div class="summary-grid">
+                <div class="summary-stat">
+                    <span class="stat-label">Focus Score</span>
+                    <span id="summary-score" class="stat-value">100</span>
+                </div>
+                <div class="summary-stat">
+                    <span class="stat-label">Violations</span>
+                    <span id="summary-violations" class="stat-value">0</span>
+                </div>
+                <div class="summary-stat">
+                    <span class="stat-label">Blink Rate</span>
+                    <span id="summary-blink-rate" class="stat-value">0</span>
+                </div>
+                <div class="summary-stat">
+                    <span class="stat-label">Health Status</span>
+                    <span id="summary-severity" class="stat-value">Perfect</span>
+                </div>
+            </div>
+            <div id="summary-reasons-list" class="summary-reasons"></div>
+            <p id="summary-advice" class="summary-advice">You maintained great posture throughout the session!</p>
+            <div class="modal-actions">
+                <button id="btn-summary-close" class="primary-btn">Awesome!</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

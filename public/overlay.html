@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edge Lighting Overlay</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: transparent;
+            pointer-events: none;
+            /* Let clicks pass through by default */
+        }
+
+        #border {
+            position: absolute;
+            inset: 0;
+            /* Cover the entire window precisely */
+            border: 0px solid transparent;
+            box-sizing: border-box;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 9999;
+        }
+
+        #border.active {
+            opacity: 1;
+            border-width: 25px;
+            /* Significant increase for visibility */
+            border-image-slice: 1;
+            border-style: solid;
+
+            /* Gradient Animation Effect */
+            animation: border-glow 6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+
+            /* Fallback vibrant color */
+            box-shadow: inset 0 0 60px rgba(255, 20, 147, 0.8), 0 0 20px rgba(255, 20, 147, 0.4);
+            border-color: #ff1493;
+            /* Deep Pink */
+        }
+
+        @keyframes border-glow {
+            0% {
+                opacity: 0;
+                box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.2);
+            }
+
+            10% {
+                opacity: 1;
+                box-shadow: inset 0 0 100px rgba(0, 255, 255, 0.9), 0 0 40px rgba(0, 255, 255, 0.6);
+                border-color: #00ffff;
+                /* Cyan */
+            }
+
+            /* Stay visible for much longer */
+            85% {
+                opacity: 0.9;
+                box-shadow: inset 0 0 80px rgba(255, 20, 147, 0.8), 0 0 30px rgba(255, 20, 147, 0.5);
+                border-color: #ff1493;
+                /* Deep Pink */
+            }
+
+            100% {
+                opacity: 0;
+                box-shadow: inset 0 0 20px rgba(255, 20, 147, 0);
+            }
+        }
+
+        /* Vitality / 20-20-20 Style (Blue) */
+        #border.vitality {
+            opacity: 1;
+            border-width: 25px;
+            border-style: solid;
+            animation: border-glow-blue 20s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            box-shadow: inset 0 0 60px rgba(0, 191, 255, 0.8), 0 0 20px rgba(0, 191, 255, 0.4);
+            border-color: #00bfff;
+            /* Deep Sky Blue */
+        }
+
+        /* Warning / Posture Style (Orange-Red) */
+        #border.warning {
+            opacity: 1;
+            border-width: 25px;
+            border-style: solid;
+            animation: border-glow-warning 6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            box-shadow: inset 0 0 60px rgba(255, 69, 0, 0.8), 0 0 20px rgba(255, 69, 0, 0.4);
+            border-color: #ff4500;
+            /* Orange Red */
+        }
+
+        @keyframes border-glow-blue {
+            0% {
+                opacity: 0;
+            }
+
+            5% {
+                opacity: 1;
+                box-shadow: inset 0 0 100px rgba(0, 191, 255, 0.9);
+            }
+
+            90% {
+                opacity: 0.8;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes border-glow-warning {
+            0% {
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+                box-shadow: inset 0 0 100px rgba(255, 69, 0, 0.9), 0 0 40px rgba(255, 69, 0, 0.6);
+                border-color: #ff4500;
+            }
+
+            85% {
+                opacity: 0.9;
+                box-shadow: inset 0 0 80px rgba(220, 20, 60, 0.8), 0 0 30px rgba(220, 20, 60, 0.5);
+                border-color: #dc143c;
+                /* Crimson */
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="border"></div>
+    <script>
+        const border = document.getElementById('border');
+
+        // Check if API is available (it should be via preload)
+        if (window.overlayAPI) {
+            window.overlayAPI.onPlayAnimation((data) => {
+                // Reset animation
+                border.classList.remove('active', 'vitality', 'warning');
+                void border.offsetWidth; // Force reflow
+
+                if (data && data.type === 'vitality') {
+                    border.classList.add('vitality');
+                } else if (data && data.type === 'warning') {
+                    border.classList.add('warning');
+                } else {
+                    border.classList.add('active');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
