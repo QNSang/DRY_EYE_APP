@@ -1,0 +1,9 @@
+# Dependencies for Eye Risk Prediction Model Training
+pandas>=2.0.0
+numpy>=1.23.0
+scikit-learn>=1.2.0
+imbalanced-learn>=0.10.0
+xgboost>=1.7.0
+lightgbm>=3.3.0
+catboost>=1.1.0
+tensorflow>=2.12.0
