@@ -35,4 +35,4 @@ Khi ứng dụng đang mở, hãy nhấn các phím sau (tiếng Anh không dấ
 3. **Statistics**: Sau khi kết thúc 1 phiên, hãy vào tab Statistics để xem biểu đồ sức khỏe được vẽ bởi **Chart.js/D3.js**.
 
 ---
-*Mọi lỗi (bug) phát sinh trong quá trình kiểm thử, vui lòng báo cáo cho QNSang.*
+
