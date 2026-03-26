@@ -78,4 +78,3 @@ Hệ thống tự động dãn cách hoặc thu hẹp khoảng thời gian kiể
 *   `src/modules/edgeLighting`: Hiệu ứng viền màn hình thay thông báo truyền thống.
 
 ---
-*Tài liệu này được soạn thảo chi tiết phục vụ cho hồ sơ kỹ thuật Datathon 2025.*
