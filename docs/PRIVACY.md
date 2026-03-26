@@ -27,4 +27,4 @@ Các thông tin về lịch sử chớp mắt, điểm khảo sát OSDI và kế
 Vì dự án là mã nguồn mở, bất kỳ chuyên gia bảo mật nào cũng có thể kiểm tra định kỳ mã nguồn để xác nhận các cam kết bảo mật này là đúng sự thật.
 
 ---
-*Mọi thắc mắc về quyền riêng tư, vui lòng liên hệ đội ngũ phát triển tại Datathon 2025.*
+
